@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="app-login.html">
+<link rel="import" href="event-endpoint.html">
+<dom-module id="event-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <firebase-app
+auth-domain="event-app-dd48f.firebaseapp.com"
+database-url="https://event-app-dd48f.firebaseio.com"
+api-key="AIzaSyALsqjMTpDaIzcWci8MhKVfRWutkVZMrTw"
+storage-bucket="event-app-dd48f.appspot.com"
+messaging-sender-id="600581165958">
+</firebase-app>
+<firebase-auth
+id="auth"
+user="{{user}}"
+status-known="{{statusKnown}}"
+provider="google"
+on-error="handleError"></firebase-auth>
+<h1>Hello![[prop1]]</h1>
+<app-login></app-login>
+<event-endpoint hidden$="[[user]]"></event-endpoint>
+  </template>
+
+  <script>
+    class MyApplication extends Polymer.Element {
+      static get is() { return 'event-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'event-app'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(MyApplication.is, MyApplication);
+  </script>
+</dom-module>

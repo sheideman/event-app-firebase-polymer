@@ -1,0 +1,7 @@
+{
+  "name": "event-app",
+  "short_name": "event-app",
+  "description": "event app with firebase &amp; polymer",
+  "start_url": "/",
+  "display": "standalone"
+}

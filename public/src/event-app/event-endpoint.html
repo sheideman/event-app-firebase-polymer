@@ -1,0 +1,106 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<dom-module id="event-endpoint">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding:10px;
+      }
+      #create{
+        width:100%;
+      }
+      #events-list {
+      list-style: none;
+      padding:0;
+      margin:0;
+      }
+      #events-list li{
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+      #events-list .content{
+        @apply(--layout-flex);
+        padding:8px;
+      }
+      #events-controls{
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+      }
+    </style>
+    <firebase-auth
+    user="{{user}}">
+    </firebase-auth>
+    <firebase-query
+      id="query"
+        path="/users/[[user.uid]]/events"
+        data="{{events}}"></firebase-query>
+<div id="events-list">
+  <div class="card">
+    <ul>
+      <template is="dom-repeat" items="{{events}}" as="event">
+        <li>
+          <p class="content">[[event.en.title]]</p>
+          <p class="content">[[event.es.title]]</p>
+          <p class="content">[[event.it.title]]</p>
+          <paper-button id="remove" raised on-tap="remove" event="[[event]]">Remove event</paper-button>
+        </li>
+      </template>
+    </ul>
+  </div>
+
+<paper-input id="title" label="Title of event..."></paper-input>
+<paper-input id="description" label="Description of event..."></paper-input>
+<div id="events-controls">
+  <paper-button id="add" on-tap="add">Add event</paper-button>
+</div>
+</div>
+  </template>
+
+  <script>
+    class EventEndpoint extends Polymer.Element {
+      static get is() { return 'event-endpoint'; }
+      static get properties() {
+        return {
+          events: {
+            type: Object
+          }
+        };
+      }
+ constructor(){
+   super()
+   console.log('event-endpoint constructor fired')
+ }
+ ready() {
+   super.ready();
+   console.log('event-endpoint Ready fired')
+ }
+ add(){
+   this.$.query.ref.push({
+     en:{
+       title: this.$.title.value,
+       description: this.$.description.value,
+       capacity:15,
+       translated: false
+     }
+
+   });
+
+   this.$.title.value = null;
+   this.$.description.value = null;
+ }
+ remove(e){
+   console.log(e.target.event.$key)
+   var key = e.target.event.$key;
+   this.$.query.ref.child(key).remove();
+ }
+
+};
+
+    window.customElements.define(EventEndpoint.is, EventEndpoint);
+  </script>
+</dom-module>
